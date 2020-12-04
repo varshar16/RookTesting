@@ -1,0 +1,50 @@
+[varsha@smithi200 ~]$ less /etc/hosts | awk '/smithi/ {print $2}'
+smithi200.front.sepia.ceph.com
+[varsha@smithi200 ~]$ less /etc/hosts | awk '/smithi/ {print $1}'
+
+centos (uses podman)
+Add insecure registry block
+sudo nano /etc/containers/registries.conf
+registries = ['ip:5000']
+
+Start registry container
+sudo podman run -i -v ~/ceph/src:/ceph/src -p ip:5000:5000 -t centos:8 /bin/bash
+
+--- a/src/script/kubejacker/kubejacker.sh
++++ b/src/script/kubejacker/kubejacker.sh
+@@ -68,15 +68,15 @@ popd
+ #popd
+ 
+ pushd kubejacker
+-docker build -t $REPO/ceph/ceph:latest .
++sudo podman build --format docker -t $REPO/ceph/ceph:latest .
+ popd
+ 
+ # Push the image to the repository
+ #docker tag $REPO/$IMAGE:$TAG $REPO/$IMAGE:latest
+-docker push $REPO/ceph/ceph:latest
++sudo podman push --log-level=debug $REPO/ceph/ceph:latest --tls-verify=false
+ #docker push $REPO/$IMAGE:$TAG
+
+ubuntu (uses docker)
+sudo groupadd docker
+sudo usermod -aG docker $USER
+newgrp docker
+
+sudo nano /etc/docker/daemon.json
+{
+  "insecure-registries" : ["172.21.15.61:5000"]
+}
+
+docker run -i -v ~/ceph/src:/ceph/src -p ip:5000:5000 -t centos:8 /bin/bash
+
+No change to kubejacker
+
+$ minikube start --driver=docker --insecure-registry="172.21.15.61:5000"
+
+
+docker run -i -v ~/ceph/src:/ceph/src -p 172.21.15.61:5000:5000 -t --name registry registry:2
+
+Later check with podman ps and netstat
+[varsha@smithi089 build]$ sudo netstat -lntp | grep :5000
+tcp        0      0 0.0.0.0:5000            0.0.0.0:*               LISTEN      102219/conmon  
