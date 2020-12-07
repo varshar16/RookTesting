@@ -39,6 +39,7 @@ function start_minikube() {
         echo "Using podman as driver"
         minikube start --driver=podman --insecure-registry="$localregistry"
         wait_for_ssh
+        minikube ssh "sudo apt-get update && sudo apt-get install lvm2 -y"
         echo "copying ceph images"
         copy_image_to_cluster "${BUILD_REGISTRY}/ceph-amd64" rook/ceph:master
         # uncomment to push the nautilus image when needed
