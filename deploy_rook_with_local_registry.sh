@@ -54,6 +54,7 @@ function start_minikube() {
                         sed -i  "s/\("useAllDevices" *: *\).*/\1false/" cluster-test.yaml
                         sed -i "s/#deviceFilter:/deviceFilter: $device_name/" cluster-test.yaml
                         sed -i '/\deviceFilter/a \   \ config: \n \    \ osdsPerDevice: \"3\" ' cluster-test.yaml
+                        kubectl create -f cluster-test.yaml
                 else
                         echo "Failed rook operator deployment"
                 fi
