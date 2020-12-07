@@ -85,6 +85,9 @@ function install_rook() {
         cd ~/go/src/github.com/rook/rook
         echo "building ceph images"
         make IMAGES="ceph" build
+        # if build fails then tag image manually
+        # podman tag docker-mirror.front.sepia.ceph.com:5000/ceph/ceph-amd64:v15.2.7-20201201 ceph/ceph-amd64:v15.2.7-20201201
+        # https://github.com/containers/buildah/issues/1034
         scriptdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
         source "${scriptdir}/../../build/common.sh"
 }
