@@ -46,6 +46,7 @@ if [ $device_format ]; then
         fi
         echo "Using podman as driver"
         minikube start --driver=podman
+        minikube ssh "sudo apt-get update && sudo apt-get install lvm2 -y"
 
         if [[ "$(kubectl get pods --all-namespaces)" ]]; then
                 echo "Deploying rook operator"
