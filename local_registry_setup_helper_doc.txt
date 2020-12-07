@@ -7,6 +7,18 @@ Add insecure registry block
 sudo nano /etc/containers/registries.conf
 registries = ['ip:5000']
 
+Add sepia lab mirror for ceph images
+[registries.insecure]
+registries = ['docker-mirror.front.sepia.ceph.com:5000', '172.21.15.14:5000']
+
+Use centos registry for pulling registry images
+https://registry.centos.org/centos/registry-v2
+
+[registries.search]
+registries = ['registry.access.redhat.com', 'registry.redhat.io', 'registry.centos.org', 'docker.io']
+
+
+
 Start registry container
 sudo podman run -i -v ~/ceph/src:/ceph/src -p ip:5000:5000 -t centos:8 /bin/bash
 
