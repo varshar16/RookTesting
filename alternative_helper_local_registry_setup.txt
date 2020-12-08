@@ -1,2 +1,19 @@
 
 minikube ssh "docker pull 172.21.15.14:5000/build-a49fab28/ceph-amd64:latest && docker tag  172.21.15.14:5000/build-a49fab28/ceph-amd64:latest  rook/ceph:master"
+
+
+Teuthology additional steps, since base image pull fails due to docker.io pull limit and does not consider insecure registries.
+
+First pull from mirror
+docker-mirror.front.sepia.ceph.com:5000/ceph/ceph-amd64:v15.2.7-20201201
+
+Then tag
+podman tag docker-mirror.front.sepia.ceph.com:5000/ceph/ceph-amd64:v15.2.7-20201201 ceph/ceph-amd64:v15.2.7-20201201
+
+Then push to local registry
+
+After make IMAGES="ceph" build is complete
+podman save -o ceph.tar localhost/build-168ce04b/ceph-amd64:latest
+sudo podman load < ceph.tar
+sudo podman tag localhost/build-168ce04b/ceph-amd64:latest 172.21.15.14:5000/build-168ce04b/ceph-amd64:latest
+sudo podman push 172.21.15.14:5000/build-168ce04b/ceph-amd64:latest --tls-verify=false
