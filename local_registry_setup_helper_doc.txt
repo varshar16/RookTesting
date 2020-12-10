@@ -11,7 +11,7 @@ Add sepia lab mirror for ceph images
 [registries.insecure]
 registries = ['docker-mirror.front.sepia.ceph.com:5000', '172.21.15.14:5000']
 
-Use centos registry for pulling registry images
+Use centos registry for pulling registry images (don't they don't work)
 https://registry.centos.org/centos/registry-v2
 
 [registries.search]
