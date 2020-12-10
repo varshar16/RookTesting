@@ -13,3 +13,19 @@ podman save -o ceph.tar localhost/build-168ce04b/ceph-amd64:latest
 sudo podman load < ceph.tar
 sudo podman tag localhost/build-168ce04b/ceph-amd64:latest 172.21.15.14:5000/build-168ce04b/ceph-amd64:latest
 sudo podman push 172.21.15.14:5000/build-168ce04b/ceph-amd64:latest --tls-verify=false
+
+
+diff --git a/images/ceph/Makefile b/images/ceph/Makefile
+index cf670fae8..428e968b7 100755
+--- a/images/ceph/Makefile
++++ b/images/ceph/Makefile
+@@ -22,7 +22,7 @@ CEPH_VERSION = v15.2.7-20201201
+ else
+ CEPH_VERSION = v15.2.7-20201201
+ endif
+-BASEIMAGE = ceph/ceph-$(GOARCH):$(CEPH_VERSION)
++BASEIMAGE = docker-mirror.front.sepia.ceph.com:5000/ceph/ceph-$(GOARCH):$(CEPH_VERSION)
+ CEPH_IMAGE = $(BUILD_REGISTRY)/ceph-$(GOARCH)
+ OPERATOR_SDK_VERSION = v0.17.1
+ GOHOST := GOOS=$(GOHOSTOS) GOARCH=$(GOHOSTARCH) go
+
