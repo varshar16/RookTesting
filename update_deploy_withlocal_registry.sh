@@ -57,7 +57,7 @@ function start_minikube() {
                 sleep 2m
                 if [[ "$(kubectl get pods -n rook-ceph)" ]]; then
                         echo "Deploying ceph clusters"
-                        #sed -i "s|ceph/ceph:v15|${localregistry}|g" cluster-test.yaml
+                        #sed -i "s|ceph/ceph:v15|${localregistry}/ceph/ceph:latest|g" cluster-test.yaml
                         # sed -i  "s/\("useAllDevices" *: *\).*/\1false/" cluster-test.yaml
                         #sed -i "s/#deviceFilter:/deviceFilter: $device_name/" cluster-test.yaml
                         #sed -i '/\deviceFilter/a \   \ config: \n \    \ osdsPerDevice: \"3\" ' cluster-test.yaml
