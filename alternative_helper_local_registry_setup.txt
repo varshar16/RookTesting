@@ -29,3 +29,4 @@ index cf670fae8..428e968b7 100755
  OPERATOR_SDK_VERSION = v0.17.1
  GOHOST := GOOS=$(GOHOSTOS) GOARCH=$(GOHOSTARCH) go
 
+kubectl exec -ti rook-ceph-tools-78cdfd976c-wjjm7 -n rook-ceph -- bash
