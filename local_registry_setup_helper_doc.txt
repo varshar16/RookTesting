@@ -1,3 +1,10 @@
+extra docker steps on ubuntu
+
+varsha@smithi180:~/go/src/github.com/rook/rook$ sudo usermod -aG docker $USER
+varsha@smithi180:~/go/src/github.com/rook/rook$ newgrp docker 
+varsha@smithi180:~/go/src/github.com/rook/rook$ docker version
+==============================================================
+
 [varsha@smithi200 ~]$ less /etc/hosts | awk '/smithi/ {print $2}'
 smithi200.front.sepia.ceph.com
 [varsha@smithi200 ~]$ less /etc/hosts | awk '/smithi/ {print $1}'
