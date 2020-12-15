@@ -1,0 +1,34 @@
+varsha@smithi180:~$ kubectl patch service -n rook-ceph -p '{"spec":{"type": "NodePort"}}' rook-ceph-nfs-test-a
+service/rook-ceph-nfs-test-a patched
+varsha@smithi180:~$ kubectl get services -n rook-ceph
+NAME                       TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)             AGE
+csi-cephfsplugin-metrics   ClusterIP   10.97.69.110    <none>        8080/TCP,8081/TCP   16m
+csi-rbdplugin-metrics      ClusterIP   10.104.102.21   <none>        8080/TCP,8081/TCP   16m
+rook-ceph-mgr              ClusterIP   10.109.156.7    <none>        9283/TCP            16m
+rook-ceph-mgr-dashboard    ClusterIP   10.97.101.60    <none>        7000/TCP            16m
+rook-ceph-mon-a            ClusterIP   10.99.229.54    <none>        6789/TCP,3300/TCP   16m
+rook-ceph-nfs-test-a       NodePort    10.99.118.155   <none>        2049:32700/TCP      7m24s
+varsha@smithi180:~$ minikube ip
+192.168.49.2
+varsha@smithi180:~$ mount -t nfs -o port=3300 $(minikube ip):/test /mnt/rook
+mount: only root can use "--options" option
+varsha@smithi180:~$ df -h /mnt
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1       916G   21G  850G   3% /
+varsha@smithi180:~$ sudo mount -t nfs -o port=32700 192.168.49.2:/test /mnt
+varsha@smithi180:~$ df -h /mnt
+Filesystem          Size  Used Avail Use% Mounted on
+192.168.49.2:/test  425G     0  425G   0% /mnt
+varsha@smithi180:~$ echo "hello" > /mnt/test
+bash: /mnt/test: Permission denied
+varsha@smithi180:~$ sudo ls /mnt/
+varsha@smithi180:~$ sudo mkdir /mnt/test
+varsha@smithi180:~$ sudo ls /mnt/
+test
+varsha@smithi180:~$ sudo vim /mnt/test/testfile
+varsha@smithi180:~$ sudo ls /mnt/test
+testfile
+varsha@smithi180:~$ sudo cat /mnt/test
+cat: /mnt/test: Is a directory
+varsha@smithi180:~$ sudo cat /mnt/test/testfile 
+hi hello
