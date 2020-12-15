@@ -1,0 +1,20 @@
+To list your cluster’s pools, execute:
+ceph osd lspools
+(https://docs.ceph.com/docs/master/rados/operations/pools/)
+
+List ceph clusters
+kubectl -n rook-ceph get pod
+
+Exec in toolbox
+kubectl exec -ti rook-ceph-tools-78cdfd976c-9cr6n -n rook-ceph -- bash
+
+List all pods
+kubectl get pods --all-namespaces
+
+Listing secrets:
+kubectl -n rook-ceph get secret
+
+Getting secret:
+kubectl -n rook-ceph get secret rook-ceph-dashboard-password -o jsonpath="{['data']['password']}" | base64 --decode && echo
+
+$ kubectl get pods -o json -n rook-ceph | jq '.items[].spec.containers[].env[]?.valueFrom.secretKeyRef.name' | grep -v null | sort | uniq
