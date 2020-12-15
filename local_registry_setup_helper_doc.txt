@@ -3,6 +3,19 @@ extra docker steps on ubuntu
 varsha@smithi180:~/go/src/github.com/rook/rook$ sudo usermod -aG docker $USER
 varsha@smithi180:~/go/src/github.com/rook/rook$ newgrp docker 
 varsha@smithi180:~/go/src/github.com/rook/rook$ docker version
+
+
+Resolved the issue by adding a file /etc/docker/daemon.json with following content
+
+{
+    "insecure-registries" : [ "hostname.cloudapp.net:5000" ]
+}
+If file does not exist then create it
+
+And then restart docker
+
+sudo systemctl daemon-reload
+sudo systemctl restart docker
 ==============================================================
 
 [varsha@smithi200 ~]$ less /etc/hosts | awk '/smithi/ {print $2}'
