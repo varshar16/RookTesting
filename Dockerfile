@@ -1,4 +1,4 @@
-FROM docker-mirror.front.sepia.ceph.com:5000/ceph/daemon-base:latest-master
+FROM docker-mirror.front.sepia.ceph.com:5000/ceph/daemon-base:latest-master-devel
 # for openSUSE, use:
 # FROM registry.opensuse.org/home/ssebastianwagner/rook-ceph/images/opensuse/leap:latest
 
