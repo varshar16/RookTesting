@@ -1,0 +1,83 @@
+diff --git a/src/script/kubejacker/Dockerfile b/src/script/kubejacker/Dockerfile
+index 2b111be76d..aa1a98cc47 100644
+--- a/src/script/kubejacker/Dockerfile
++++ b/src/script/kubejacker/Dockerfile
+@@ -3,7 +3,7 @@ FROM ceph/daemon-base:latest-master
+ # FROM registry.opensuse.org/home/ssebastianwagner/rook-ceph/images/opensuse/leap:latest
+ 
+ 
+-#ADD bin.tar.gz /usr/bin/
++#ADD bin.tar.gz /usr/local/bin/
+ #ADD lib.tar.gz /usr/lib64/
+ 
+ # Assume developer is using default paths (i.e. /usr/local), so
+@@ -13,3 +13,6 @@ FROM ceph/daemon-base:latest-master
+ 
+ ADD python_common.tar.gz /usr/share/ceph/python_common
+ ADD mgr_plugins.tar.gz /usr/share/ceph/mgr
++ADD ceph-volume.tar.gz /usr/share/ceph/ceph-volume
++
++#RUN pip install /usr/share/ceph/ceph-volume 
+diff --git a/src/script/kubejacker/kubejacker.sh b/src/script/kubejacker/kubejacker.sh
+index 0dd27a924e..fdde18a43c 100755
+--- a/src/script/kubejacker/kubejacker.sh
++++ b/src/script/kubejacker/kubejacker.sh
+@@ -40,6 +40,11 @@ cp $SCRIPTPATH/Dockerfile kubejacker
+ #tar czf $BUILDPATH/kubejacker/bin.tar.gz $BINS
+ #popd
+ 
++#pushd $BUILDPATH/venv/bin
++#find ./ -not -name "ceph-volume*" -exec rm -f {} \;
++#tar czf $BUILDPATH/kubejacker/bin.tar.gz *
++#popd
++
+ # We need ceph-common to support the binaries
+ # We need librados/rbd to support mgr modules
+ # that import the python bindings
+@@ -54,11 +59,13 @@ tar --exclude=__pycache__ --exclude=tests -czf $BUILDPATH/kubejacker/python_comm
+ popd
+ 
+ pushd ../src/pybind/mgr
+-pushd ../../python-common
+ find ./ -name "*.pyc" -exec rm -f {} \;
+ # Exclude node_modules because it's the huge sources in dashboard/frontend
+ tar --exclude=node_modules --exclude=tests --exclude-backups -czf $BUILDPATH/kubejacker/mgr_plugins.tar.gz *
+ popd
++
++pushd ../src/ceph-volume
++tar --exclude=__pycache__ --exclude=tests -czf $BUILDPATH/kubejacker/ceph-volume.tar.gz *
+ popd
+ 
+ #ECLIBS="libec_*.so*"
+
+
+index a66b7bb7df..acb4e2fd75 100644
+--- a/src/ceph-volume/ceph_volume/main.py
++++ b/src/ceph-volume/ceph_volume/main.py
+@@ -12,7 +12,7 @@ from ceph_volume import log, devices, configuration, conf, exceptions, terminal,
+ class Volume(object):
+     _help = """
+ ceph-volume: Deploy Ceph OSDs using different device technologies like lvm or
+-physical disks.
++physical disks. TESTING ON DETECTED
+ 
+ Log Path: {log_path}
+ Ceph Conf: {ceph_path}
+diff --git a/src/ceph-volume/ceph_volume/util/arg_validators.py b/src/ceph-volume/ceph_volume/util/arg_validators.py
+index 94cb4f691d..e056434283 100644
+--- a/src/ceph-volume/ceph_volume/util/arg_validators.py
++++ b/src/ceph-volume/ceph_volume/util/arg_validators.py
+@@ -48,11 +48,13 @@ class ValidBatchDevice(ValidDevice):
+ 
+     def __call__(self, dev_path):
+         dev = self._is_valid_device(dev_path)
++        """
+         if dev.is_partition:
+             raise argparse.ArgumentError(
+                 None,
+                 '{} is a partition, please pass '
+                 'LVs or raw block devices'.format(dev_path))
++        """
+         return self._format_device(dev)
+ 
+ 
