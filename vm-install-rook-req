@@ -1,0 +1,12 @@
+#!/bin/bash -e
+
+sudo apt  install vim -y
+sudo apt  install git -y
+sudo apt  install curl -y
+sudo apt  install docker.io -y
+
+# Create docker group
+
+sudo usermod -aG docker $USER
+newgrp docker 
+docker version
