@@ -1,0 +1,9 @@
+kubectl exec -ti rook-ceph-tools-78cdfd976c-n6fms -n rook-ceph -- bash
+kubectl get pods --all-namespaces
+kubectl logs -n rook-ceph rook-ceph-mgr-a-77b67d6dbf-ttjs5
+kubectl -n rook-ceph delete pod -l app=rook-ceph-mgr
+kubectl -n rook-ceph describe pods -l app=rook-ceph-mds
+
+curl -vvv 192.168.0.138:5000/ceph/ceph:latest
+
+docker rmi $(docker images -f "dangling=true" -q)
