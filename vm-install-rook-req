@@ -4,6 +4,7 @@ sudo apt  install vim -y
 sudo apt  install git -y
 sudo apt  install curl -y
 sudo apt  install docker.io -y
+sudo apt install nfs-common -y
 
 # Create docker group
 
