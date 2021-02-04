@@ -13,3 +13,6 @@ User: admin
 Ganesha log: kubectl logs -n rook-ceph rook-ceph-nfs-my-nfs-c-974d55bd7-fqvk9 nfs-ganesha
 https://github.com/rook/rook/blob/22da5e299412300abc23e527c63f59cb8ea4090e/Documentation/ceph-dashboard.md
 https://docs.ceph.com/docs/octopus/mgr/dashboard/#configuring-nfs-ganesha-in-the-dashboard
+
+# to check what is being set
+ceph config dump
