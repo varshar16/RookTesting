@@ -1,0 +1,15 @@
+ceph dashboard set-ganesha-clusters-rados-pool-namespace my-nfs:myfs-data0/nfs-ns
+
+minikub ip
+
+kubectl patch service -n rook-ceph -p '{"spec":{"type": "NodePort"}}' rook-ceph-mgr-dashboard
+kubectl get service -n rook-ceph rook-ceph-mgr-dashboard
+
+Password:
+kubectl -n rook-ceph get secret rook-ceph-dashboard-password -o jsonpath="{['data']['password']}" | base64 --decode && echo
+
+User: admin
+
+Ganesha log: kubectl logs -n rook-ceph rook-ceph-nfs-my-nfs-c-974d55bd7-fqvk9 nfs-ganesha
+https://github.com/rook/rook/blob/22da5e299412300abc23e527c63f59cb8ea4090e/Documentation/ceph-dashboard.md
+https://docs.ceph.com/docs/octopus/mgr/dashboard/#configuring-nfs-ganesha-in-the-dashboard
