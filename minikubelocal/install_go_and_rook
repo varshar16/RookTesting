@@ -1,0 +1,9 @@
+#!/bin/bash -e
+
+# https://golang.org/doc/install
+# Check latest go package here https://golang.org/dl/
+wget -c https://storage.googleapis.com/golang/go1.15.8.linux-amd64.tar.gz
+
+sudo tar -C /usr/local -xzf go1.15.8.linux-amd64.tar.gz
+export PATH=$PATH:/usr/local/go/bin
+go get github.com/rook/rook
