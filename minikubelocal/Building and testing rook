@@ -16,6 +16,6 @@ For unit tests, cd into particular directory and run "go test -v"
 
 
 CI Tests (https://github.com/rook/rook/tree/master/tests)
-tests/scripts/minikube.sh up
+tests/scripts/minikube.sh up ceph
  ~/go/src/github.com/rook/rook$ export STORAGE_PROVIDER_TESTS=ceph
 ~/go/src/github.com/rook/rook$  _output/tests/linux_amd64/integration -test.v -test.timeout 1800s -test.run CephMgrSuite
